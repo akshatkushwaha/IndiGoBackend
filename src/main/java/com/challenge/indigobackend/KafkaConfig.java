@@ -4,8 +4,7 @@ import org.apache.kafka.clients.admin.AdminClientConfig;
 import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.producer.ProducerConfig;
-import org.apache.kafka.common.serialization.StringDeserializer;
-import org.apache.kafka.common.serialization.StringSerializer;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.annotation.EnableKafka;
@@ -19,7 +18,23 @@ import java.util.Map;
 @Configuration
 public class KafkaConfig {
 
-    private final String bootstrapAddress = "localhost:9092";
+    @Value(value = "${spring.kafka.bootstrap-servers}")
+    private String bootstrapAddress;
+
+    @Value(value = "${spring.kafka.consumer.group-id}")
+    private String groupId;
+
+    @Value(value = "${spring.kafka.producer.key-serializer}")
+    private String keySerializer;
+
+    @Value(value = "${spring.kafka.producer.value-serializer}")
+    private String valueSerializer;
+
+    @Value(value = "${spring.kafka.consumer.key-deserializer}")
+    private String keyDeserializer;
+
+    @Value(value = "${spring.kafka.consumer.value-deserializer}")
+    private String valueDeserializer;
 
     @Bean
     public KafkaAdmin kafkaAdmin() {
@@ -38,8 +53,8 @@ public class KafkaConfig {
         Map<String, Object> config = new HashMap<>();
 
         config.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapAddress);
-        config.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
-        config.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+        config.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, keySerializer);
+        config.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, valueSerializer);
 
         return new DefaultKafkaProducerFactory<>(config);
     }
@@ -54,9 +69,9 @@ public class KafkaConfig {
         Map<String, Object> config = new HashMap<>();
 
         config.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapAddress);
-        config.put(ConsumerConfig.GROUP_ID_CONFIG, "flights-group");
-        config.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
-        config.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
+        config.put(ConsumerConfig.GROUP_ID_CONFIG, groupId);
+        config.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, keyDeserializer);
+        config.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, valueDeserializer);
 
         return new DefaultKafkaConsumerFactory<>(config);
     }
