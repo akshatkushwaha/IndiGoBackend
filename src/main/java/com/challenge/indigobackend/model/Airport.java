@@ -1,4 +1,4 @@
-package com.challenge.indigobackend.enums;
+package com.challenge.indigobackend.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

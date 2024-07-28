@@ -1,4 +1,6 @@
-package com.challenge.indigobackend.model;
+package com.challenge.indigobackend.enums;
+
+import jakarta.persistence.Entity;
 
 public enum FlightStatus {
     SCHEDULED,

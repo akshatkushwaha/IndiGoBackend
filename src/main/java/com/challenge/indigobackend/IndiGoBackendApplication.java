@@ -6,8 +6,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class IndiGoBackendApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(IndiGoBackendApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(IndiGoBackendApplication.class, args);
+    }
 
 }
