@@ -45,7 +45,11 @@ public class AirportController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteAirport(@PathVariable Long id) {
-        airportService.deleteAirport(id);
+        try {
+            airportService.deleteAirport(id);
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
         return ResponseEntity.noContent().build();
     }
 }

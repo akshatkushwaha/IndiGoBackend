@@ -1,5 +1,6 @@
 package com.challenge.indigobackend.service;
 
+import com.challenge.indigobackend.errors.ObjectNotFound;
 import com.challenge.indigobackend.model.Airport;
 import com.challenge.indigobackend.repository.AirportRepository;
 import lombok.AllArgsConstructor;
@@ -25,7 +26,7 @@ public class AirportService {
         return airportRepository.save(airport);
     }
 
-    public Airport updateAirport(Long id, Airport airportDetails) {
+    public Airport updateAirport(Long id, Airport airportDetails) throws ObjectNotFound {
         Optional<Airport> optionalAirport = airportRepository.findById(id);
         if (optionalAirport.isPresent()) {
             Airport airport = optionalAirport.get();
@@ -35,11 +36,15 @@ public class AirportService {
             airport.setCountry(airportDetails.getCountry());
             return airportRepository.save(airport);
         } else {
-            throw new RuntimeException("Airport not found with id " + id);
+            throw new ObjectNotFound("Airport not found with id " + id);
         }
     }
 
-    public void deleteAirport(Long id) {
-        airportRepository.deleteById(id);
+    public void deleteAirport(Long id) throws ObjectNotFound {
+        if (airportRepository.existsById(id)) {
+            airportRepository.deleteById(id);
+        } else {
+            throw new ObjectNotFound("Airport not found with id " + id);
+        }
     }
 }
